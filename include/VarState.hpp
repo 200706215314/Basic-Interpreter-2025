@@ -6,12 +6,11 @@
 #include <vector>
 
 class VarState {
-public:
-	void setValue(const std::string &name, int value);
-	int getValue(const std::string &name) const;
-	void clear();
+ public:
+  void setValue(const std::string& name, int value);
+  int getValue(const std::string& name) const;
+  void clear();
 
-private:
-	std::unordered_map<std::string, int> values_;
+ private:
+  std::unordered_map<std::string, int> values_;
 };
-

@@ -1,10 +1,11 @@
 #include "Lexer.hpp"
 
-#include "utils/Error.hpp"
 #include <limits>
 #include <string>
 #include <unordered_map>
 #include <vector>
+
+#include "utils/Error.hpp"
 
 const std::unordered_map<std::string, TokenType> TABLE = {
     {"LET", TokenType::LET},     {"PRINT", TokenType::PRINT},
@@ -15,13 +16,13 @@ const std::unordered_map<std::string, TokenType> TABLE = {
     {"CLEAR", TokenType::CLEAR}, {"QUIT", TokenType::QUIT},
     {"HELP", TokenType::HELP}};
 
-bool isOverflow(const std::string &digits, bool negative) {
+bool isOverflow(const std::string& digits, bool negative) {
   constexpr long long max_limit = std::numeric_limits<int>::max();
   return negative ? std::stol(digits) > max_limit
                   : std::stol(digits) > max_limit + 1;
 }
 
-TokenStream Lexer::tokenize(const std::string &line) const {
+TokenStream Lexer::tokenize(const std::string& line) const {
   std::vector<Token> tokens;
   int column = 0;
   while (column < line.size()) {
@@ -40,18 +41,18 @@ TokenStream Lexer::tokenize(const std::string &line) const {
       std::string text = line.substr(start, column - start);
       TokenType type = matchKeyword(text);
       switch (type) {
-      case TokenType::REM:
-        tokens.push_back(Token{TokenType::REM, text, column});
-        if (column < line.size()) {
-          std::string comment = line.substr(column);
-          tokens.push_back(Token{TokenType::REMINFO, comment, column + 1});
-        }
-        return TokenStream(std::move(tokens));
-      case TokenType::UNKNOWN:
-        tokens.push_back(Token{TokenType::IDENTIFIER, text, column});
-        break;
-      default:
-        tokens.push_back(Token{type, text, column});
+        case TokenType::REM:
+          tokens.push_back(Token{TokenType::REM, text, column});
+          if (column < line.size()) {
+            std::string comment = line.substr(column);
+            tokens.push_back(Token{TokenType::REMINFO, comment, column + 1});
+          }
+          return TokenStream(std::move(tokens));
+        case TokenType::UNKNOWN:
+          tokens.push_back(Token{TokenType::IDENTIFIER, text, column});
+          break;
+        default:
+          tokens.push_back(Token{type, text, column});
       }
       continue;
     }
@@ -68,38 +69,38 @@ TokenStream Lexer::tokenize(const std::string &line) const {
 
     TokenType symbolType = TokenType::UNKNOWN;
     switch (ch) {
-    case '+':
-      symbolType = TokenType::PLUS;
-      break;
-    case '-':
-      symbolType = TokenType::MINUS;
-      break;
-    case '*':
-      symbolType = TokenType::MUL;
-      break;
-    case '/':
-      symbolType = TokenType::DIV;
-      break;
-    case '=':
-      symbolType = TokenType::EQUAL;
-      break;
-    case '>':
-      symbolType = TokenType::GREATER;
-      break;
-    case '<':
-      symbolType = TokenType::LESS;
-      break;
-    case '(':
-      symbolType = TokenType::LEFT_PAREN;
-      break;
-    case ')':
-      symbolType = TokenType::RIGHT_PAREN;
-      break;
-    case ',':
-      symbolType = TokenType::COMMA;
-      break;
-    default:
-      break;
+      case '+':
+        symbolType = TokenType::PLUS;
+        break;
+      case '-':
+        symbolType = TokenType::MINUS;
+        break;
+      case '*':
+        symbolType = TokenType::MUL;
+        break;
+      case '/':
+        symbolType = TokenType::DIV;
+        break;
+      case '=':
+        symbolType = TokenType::EQUAL;
+        break;
+      case '>':
+        symbolType = TokenType::GREATER;
+        break;
+      case '<':
+        symbolType = TokenType::LESS;
+        break;
+      case '(':
+        symbolType = TokenType::LEFT_PAREN;
+        break;
+      case ')':
+        symbolType = TokenType::RIGHT_PAREN;
+        break;
+      case ',':
+        symbolType = TokenType::COMMA;
+        break;
+      default:
+        break;
     }
     if (symbolType != TokenType::UNKNOWN) {
       tokens.push_back(Token{symbolType, std::string(1, ch), column});
@@ -121,7 +122,7 @@ bool Lexer::isNumberChar(char ch) noexcept {
   return std::isalnum(static_cast<unsigned char>(ch)) || ch == '_';
 }
 
-TokenType Lexer::matchKeyword(const std::string &text) noexcept {
+TokenType Lexer::matchKeyword(const std::string& text) noexcept {
   auto it = TABLE.find(text);
   if (it != TABLE.end()) {
     return it->second;

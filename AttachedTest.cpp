@@ -1,9 +1,10 @@
+#include <unistd.h>
+
 #include <chrono>
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
 #include <string>
-#include <unistd.h>
 #include <vector>
 
 using namespace std;
@@ -44,7 +45,7 @@ bool silent = false, firstFail = false, hideError = false, useColor = true;
 
 int correct = 0, wrong = 0, total = 0;
 
-void usage(const char *progname) {
+void usage(const char* progname) {
   cout << progname
        << " [-h] [-e <your_exec>] [-s <stander_exec>] [-t <trace_file>] [-f] "
           "[-m] [-q]"
@@ -63,62 +64,51 @@ void usage(const char *progname) {
 }
 
 string color(string ce) {
-  if (useColor)
-    return ce;
+  if (useColor) return ce;
   return "";
 }
 
-void parseArguments(int argc, char **argv) {
+void parseArguments(int argc, char** argv) {
   int c;
   opterr = 0;
   while ((c = getopt(argc, argv, "e:s:t:fmqch")) != -1) {
     switch (c) {
-    case 'e':
-      if (studentBasic.size())
+      case 'e':
+        if (studentBasic.size()) usage(argv[0]);
+        studentBasic = optarg;
+        break;
+      case 's':
+        if (standerBasic.size()) usage(argv[0]);
+        standerBasic = optarg;
+        break;
+      case 't':
+        if (traceFile.size()) usage(argv[0]);
+        traceFile = optarg;
+        break;
+      case 'f':
+        if (firstFail) usage(argv[0]);
+        firstFail = true;
+        break;
+      case 'm':
+        if (hideError) usage(argv[0]);
+        hideError = true;
+        break;
+      case 'q':
+        if (silent) usage(argv[0]);
+        silent = true;
+        break;
+      case 'h':
         usage(argv[0]);
-      studentBasic = optarg;
-      break;
-    case 's':
-      if (standerBasic.size())
+        break;
+      default:
         usage(argv[0]);
-      standerBasic = optarg;
-      break;
-    case 't':
-      if (traceFile.size())
-        usage(argv[0]);
-      traceFile = optarg;
-      break;
-    case 'f':
-      if (firstFail)
-        usage(argv[0]);
-      firstFail = true;
-      break;
-    case 'm':
-      if (hideError)
-        usage(argv[0]);
-      hideError = true;
-      break;
-    case 'q':
-      if (silent)
-        usage(argv[0]);
-      silent = true;
-      break;
-    case 'h':
-      usage(argv[0]);
-      break;
-    default:
-      usage(argv[0]);
-      break;
+        break;
     }
   }
-  if (silent && (traceFile.size() || firstFail))
-    usage(argv[0]);
-  if (silent)
-    hideError = true;
-  if (studentBasic.size() == 0)
-    studentBasic = defaultStudentBasic;
-  if (standerBasic.size() == 0)
-    standerBasic = defaultStanderBasic;
+  if (silent && (traceFile.size() || firstFail)) usage(argv[0]);
+  if (silent) hideError = true;
+  if (studentBasic.size() == 0) studentBasic = defaultStudentBasic;
+  if (standerBasic.size() == 0) standerBasic = defaultStanderBasic;
 }
 
 void clearTempFiles() {
@@ -126,7 +116,7 @@ void clearTempFiles() {
   (void)r;
 }
 
-int testTrace(const char *trace) {
+int testTrace(const char* trace) {
   clearTempFiles();
   if (system((string() + "cat " + trace + " | timeout 1 " + standerBasic +
               " > test_ans 2> /dev/null")
@@ -136,8 +126,7 @@ int testTrace(const char *trace) {
               " > test_out 2> /dev/null")
                  .c_str()) != 0)
     return 2;
-  if (system("diff test_ans test_out > /dev/null 2> /dev/null"))
-    return 4;
+  if (system("diff test_ans test_out > /dev/null 2> /dev/null")) return 4;
   if (system((string() + "cat " + trace +
               " | timeout 5 valgrind --error-exitcode=2 --leak-check=full " +
               studentBasic + " > /dev/null 2> /dev/null")
@@ -148,8 +137,7 @@ int testTrace(const char *trace) {
 }
 
 void runTest(const string currentTrace) {
-  if (!silent)
-    cout << "Trace \"" << currentTrace << "\" ... ";
+  if (!silent) cout << "Trace \"" << currentTrace << "\" ... ";
   cout.flush();
   int error = testTrace(currentTrace.c_str());
   total++;
@@ -193,22 +181,19 @@ void runTest(const string currentTrace) {
       }
     }
     clearTempFiles();
-    if (firstFail)
-      throw exception();
+    if (firstFail) throw exception();
   }
 }
 
 void showScore() {
   int score = correct / 5 * 5;
-  if (!silent)
-    cout << correct << " / " << total << " trace(s) passed." << endl;
-  if (total != traceCount)
-    return;
+  if (!silent) cout << correct << " / " << total << " trace(s) passed." << endl;
+  if (total != traceCount) return;
   cout << "Final Score: " << (score / 10) << "." << (score % 10) << endl;
 }
 
 // 附着式测试程序的主函数
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
   cout << "=== 附着式 BASIC 解释器测试程序 ===" << endl;
   cout << "本程序将利用 score.cpp 的功能进行测试" << endl;
   cout << "=====================================" << endl;

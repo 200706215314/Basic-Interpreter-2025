@@ -6,39 +6,39 @@
 class VarState;
 
 class Expression {
-public:
+ public:
   virtual ~Expression() = default;
-  virtual int evaluate(const VarState &state) const = 0;
+  virtual int evaluate(const VarState& state) const = 0;
 };
 
 class ConstExpression : public Expression {
-public:
+ public:
   explicit ConstExpression(int value);
   ~ConstExpression() = default;
-  int evaluate(const VarState &state) const override;
+  int evaluate(const VarState& state) const override;
 
-private:
+ private:
   int value_;
 };
 
 class VariableExpression : public Expression {
-public:
+ public:
   explicit VariableExpression(std::string name);
   ~VariableExpression() = default;
-  int evaluate(const VarState &state) const override;
+  int evaluate(const VarState& state) const override;
 
-private:
+ private:
   std::string name_;
 };
 
 class CompoundExpression : public Expression {
-public:
-  CompoundExpression(Expression *left, char op, Expression *right);
+ public:
+  CompoundExpression(Expression* left, char op, Expression* right);
   ~CompoundExpression();
-  int evaluate(const VarState &state) const override;
+  int evaluate(const VarState& state) const override;
 
-private:
-  Expression *left_;
-  Expression *right_;
+ private:
+  Expression* left_;
+  Expression* right_;
   char op_;
 };

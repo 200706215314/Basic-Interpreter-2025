@@ -20,7 +20,7 @@ int main() {
     }
     try {
       // TODO: The main function.
-    } catch (const BasicError &e) {
+    } catch (const BasicError& e) {
       std::cout << e.message() << "\n";
     }
   }
