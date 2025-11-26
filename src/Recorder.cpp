@@ -42,7 +42,7 @@ void Recorder::clear() noexcept {
 
 void Recorder::printLines() const {
    for (auto it : statements_) {
-     std::cout << it.second->text() << '\n';                   //还没找到输出的格式要求
+     std::cout << it.first << " " << it.second->text() << '\n';                   //还没找到输出的格式要求
    }
  }
 

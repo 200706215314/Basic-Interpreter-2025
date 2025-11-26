@@ -17,7 +17,7 @@ class ParsedLine {
   ParsedLine();
   ~ParsedLine();
 
-  void setLine(int line);
+  void setLine(int line);               //给line_number_赋值
   std::optional<int> getLine();
   void setStatement(Statement* stmt);
   Statement* getStatement() const;

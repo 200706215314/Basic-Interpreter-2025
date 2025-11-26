@@ -12,7 +12,7 @@ class Recorder {
 
   void add(int line, Statement* stmt);
   void remove(int line);
-  const Statement* get(int line) const noexcept;
+  const Statement* get(int line) const noexcept;    //返回所在行（如果有）状态statement的指针
   bool hasLine(int line) const noexcept;
   void clear() noexcept;
   void printLines() const;
