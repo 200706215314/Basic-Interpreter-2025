@@ -18,7 +18,7 @@ class Program {
   void list() const;
   void clear();
 
-  void execute(Statement* stmt);
+  void execute(const Statement* stmt);
 
   int getPC() const noexcept;
   void changePC(int line);
@@ -27,8 +27,8 @@ class Program {
  private:
   Recorder recorder_;
   VarState vars_;
-  int programCounter_;
-  bool programEnd_;
+  int programCounter_;   //程序运行到第几行
+  bool programEnd_;      //判断程序是否结束
 
   void resetAfterRun() noexcept;
 };

@@ -40,7 +40,7 @@ ParsedLine Parser::parseLine(TokenStream& tokens,
 
     // 如果只有行号，表示删除该行
     if (tokens.empty()) {
-      return result;
+      return result;            //这里真删除了吗
     }
   }
 
@@ -101,12 +101,25 @@ Statement* Parser::parseLet(TokenStream& tokens,
   auto expr = parseExpression(tokens);
 
   // TODO: create a corresponding stmt and return it.
+  //有没有必要？
+  if (!tokens.empty()) {
+    delete expr;
+    throw BasicError("SYNTAX ERROR");
+  }
+
+  return new LetStatement(varName, expr, originLine);
 }
 
 Statement* Parser::parsePrint(TokenStream& tokens,
                               const std::string& originLine) const {
   auto expr = parseExpression(tokens);
   // TODO: create a corresponding stmt and return it.
+  if (!tokens.empty()) {
+    delete expr;
+    throw BasicError("SYNTAX ERROR");
+  }
+
+  return new PrintStatement(originLine, expr);
 }
 
 Statement* Parser::parseInput(TokenStream& tokens,
@@ -122,6 +135,11 @@ Statement* Parser::parseInput(TokenStream& tokens,
 
   std::string varName = varToken->text;
   // TODO: create a corresponding stmt and return it.
+  if (!tokens.empty()) {
+    throw BasicError("SYNTAX ERROR");
+  }
+
+  return new InputStatement(varName, originLine);
 }
 
 Statement* Parser::parseGoto(TokenStream& tokens,
@@ -137,6 +155,12 @@ Statement* Parser::parseGoto(TokenStream& tokens,
 
   int targetLine = parseLiteral(lineToken);
   // TODO: create a corresponding stmt and return it.
+
+  if (!tokens.empty()) {
+    throw BasicError("SYNTAX ERROR");
+  }
+
+  return new GotoStatement(targetLine, originLine);
 }
 
 Statement* Parser::parseIf(TokenStream& tokens,
@@ -186,6 +210,13 @@ Statement* Parser::parseIf(TokenStream& tokens,
   int targetLine = parseLiteral(lineToken);
 
   // TODO: create a corresponding stmt and return it.
+  if (!tokens.empty()) {
+    delete leftExpr;
+    delete rightExpr;
+    throw BasicError("SYNTAX ERROR");
+  }
+
+  return new IFStatement(targetLine, originLine, leftExpr, rightExpr, op);;
 }
 
 Statement* Parser::parseRem(TokenStream& tokens,
@@ -195,11 +226,23 @@ Statement* Parser::parseRem(TokenStream& tokens,
     throw BasicError("SYNTAX ERROR");
   }
   // TODO: create a corresponding stmt and return it.
+  std::string comment = remInfo->text;
+  if (!tokens.empty()) {
+    delete remInfo;
+    throw BasicError("SYNTAX ERROR");
+  }
+
+  return new RemStatement(originLine, comment);
 }
 
 Statement* Parser::parseEnd(TokenStream& tokens,
                             const std::string& originLine) const {
   // TODO: create a corresponding stmt and return it.
+  if (!tokens.empty()) {
+    throw BasicError("SYNTAX ERROR");
+  }
+
+  return new EndStatement(originLine);
 }
 
 Expression* Parser::parseExpression(TokenStream& tokens) const {

@@ -5,7 +5,7 @@ Parser 接收 `Lexer` 生成的 `TokenStream`，并将词法单元转换为语�
 - 区分带行号的程序语句与立即执行命令；
 - 解析 `LET`、`PRINT`、`INPUT`、`GOTO`、`IF`、`REM`、`END` 开头的输入并构造**对应的Statement**；
 - 构建算术表达式树，支持变量、整数常量与二元运算；
-- 返回解析结果。
+  - 返回解析结果。
 
 ### 依赖关系
 - `Token` 模块中的 `TokenType`、`Token`、`TokenStream`；

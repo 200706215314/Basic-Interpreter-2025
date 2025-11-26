@@ -1,6 +1,4 @@
-## Lexer 模块
-
-### 职责概览
+## Lexer 模块## 职责概览
 Lexer 负责把一行 BASIC 源码转换成 `TokenStream`，供 `Parser` 和解释器主循环消费。核心职责：
 - 按字符扫描输入行，识别关键字、标识符、数字、运算符与括号；
 - 生成 `Token` 序列并封装为 `TokenStream`；

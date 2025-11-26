@@ -3,7 +3,7 @@
 ### 职责概览
 `BasicError` 是一个轻量级的错误类型封装，基于 `std::runtime_error`，用于在解释器内部传递带有描述信息的异常。它提供一个简洁的接口来获取原始错误消息。
 
-### 关键接口
+## 关键接口
 ```cpp
 class BasicError : public std::runtime_error {
 public:
