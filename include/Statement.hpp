@@ -100,6 +100,7 @@ public:
 
 private:
   int line_;
+  bool newline;
 };
 
 class IFStatement: public Statement {

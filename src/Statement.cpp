@@ -77,6 +77,7 @@ void GotoStatement::execute(VarState& state, Program& program) const {
   //此语句将无条件地将控制权转移至程序中的第 n 行。如果第 n 行不存在，基本解释程序应生成一条错误消息，通知用户该行不存在
   // std::cout << "change PC";
   program.changePC(line_);
+  program.new_line = false;
 }
 
 IFStatement::IFStatement(const int line, std::string source, Expression* expr1,
@@ -108,6 +109,7 @@ void IFStatement::execute(VarState& state, Program& program) const {
   }
 
   if (condition) {
+    program.new_line = false;
     program.changePC(line_);
   }
 }

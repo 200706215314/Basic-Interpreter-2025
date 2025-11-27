@@ -15,15 +15,23 @@ void Program::addStmt(int line, Statement* stmt) {
 
 void Program::changePC(int line) {
    // 强制改变 PC，用于 GOTO/IF
-   auto lines = recorder_.getAllLines();
-   std::sort(lines.begin(), lines.end());
-   auto it = std::find(lines.begin(), lines.end(), line);
-   if (it != lines.end()) {
-     programCounter_ = std::distance(lines.begin(), it);
-   }
-   else {
-     throw BasicError("LINE NUMBER ERROR");
-   }
+   // auto lines = recorder_.getAllLines();
+   // std::sort(lines.begin(), lines.end());
+   // auto it = std::find(lines.begin(), lines.end(), line);
+   // if (it != lines.end()) {
+   //   programCounter_ = std::distance(lines.begin(), it);
+   // }
+   // else {
+   //   throw BasicError("LINE NUMBER ERROR");
+   // }
+  auto lines = recorder_.getAllLines();
+  std::sort(lines.begin(), lines.end());  // 基于排序后的行号查找
+  auto it = std::find(lines.begin(), lines.end(), line);
+  if (it != lines.end()) {
+    programCounter_ = std::distance(lines.begin(), it);  // 定位到目标行索引
+  } else {
+    throw BasicError("LINE NUMBER ERROR");
+  }
  }
 
 void Program::clear() {
@@ -80,10 +88,13 @@ void Program::run() {
       if (const auto stmt = recorder_.get(currentLine)) {
         execute(stmt);
         // std::cout << "execute";
+        if (!programEnd_ && new_line) {
+          // std::cout << "plus" << std::endl;
+          programCounter_++;
+        }
+        new_line = true;
       }
-      if (!programEnd_) {
-        programCounter_++;
-      }
+
     }
   } catch (const BasicError& error) {
     std::cout << error.what() << std::endl;

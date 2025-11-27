@@ -23,6 +23,7 @@ class Program {
   int getPC() const noexcept;
   void changePC(int line);
   void programEnd();
+  bool new_line = true;
 
  private:
   Recorder recorder_;
