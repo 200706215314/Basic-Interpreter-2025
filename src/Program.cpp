@@ -32,6 +32,7 @@ void Program::clear() {
  }
 
 void Program::execute(const Statement* stmt) {
+  if (stmt == nullptr) return;
    stmt->execute(vars_, *this);
  }
 
@@ -40,13 +41,14 @@ int Program::getPC() const noexcept {
  }
 
 void Program::list() const {
-   auto lines = recorder_.getAllLines();
-   std::sort(lines.begin(), lines.end());
+   // auto lines = recorder_.getAllLines();
+   // std::sort(lines.begin(), lines.end());
 
-   for (auto i : lines) {
-     auto it = recorder_.get(i);
-     std::cout << i << it->text() << '\n';             //格式待定
-   }
+   // for (auto i : lines) {
+   //   auto it = recorder_.get(i);
+   //   std::cout << it->text() << '\n';             //格式待定
+   // }
+  recorder_.printLines();
  }
 
 void Program::programEnd() {
@@ -89,4 +91,3 @@ void Program::run() {
 
   resetAfterRun();
  }
-

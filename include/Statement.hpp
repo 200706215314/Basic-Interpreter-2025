@@ -54,15 +54,6 @@ private:
   std::string varName_;
 };
 
-class IfStatement: public Statement {
-public:
-  IfStatement(std::string source, Expression* expr);
-  ~IfStatement() override;
-  void execute(VarState& state, Program& program) const override;
-
-private:
-};
-
 class GotoStatement: public Statement {
 public:
   GotoStatement(int line, std::string source);
@@ -88,7 +79,7 @@ private:
 
 class RemStatement: public Statement {
 public:
-  RemStatement(std::string source, std::string  comment);
+  RemStatement(std::string source, std::string comment);
   ~RemStatement() override;
   void execute(VarState& state, Program& program) const override;
 

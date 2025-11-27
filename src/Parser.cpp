@@ -11,7 +11,7 @@
 
 ParsedLine::ParsedLine() { statement_ = nullptr; }
 
-ParsedLine::~ParsedLine() { delete statement_; }
+ParsedLine::~ParsedLine() = default;
 
 void ParsedLine::setLine(int line) { line_number_.emplace(line); }
 
@@ -348,7 +348,7 @@ int Parser::parseLiteral(const Token* token) const {
 
   try {
     size_t pos;
-    int value = std::stoi(token->text, &pos);
+    int value = std::stoi(token->text, &pos);  //将字符串转换为整数
 
     // 检查是否整个字符串都被解析
     if (pos != token->text.length()) {

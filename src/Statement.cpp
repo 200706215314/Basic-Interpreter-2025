@@ -93,7 +93,7 @@ void IFStatement::execute(VarState& state, Program& program) const {
   }
 }
 
- RemStatement::RemStatement(std::string source, std::string  comment) : Statement(std::move(source)), comment_(std::move(comment)){};
+ RemStatement::RemStatement(std::string source, std::string comment) : Statement(std::move(source)), comment_(std::move(comment)){};
 
  RemStatement::~RemStatement() = default;
 

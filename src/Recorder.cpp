@@ -1,6 +1,7 @@
 // TODO: Imply interfaces declared in the Recorder.hpp.
 #include "Recorder.hpp"
 #include <iostream>
+#include <algorithm>
 
  Recorder::~Recorder() {
    clear();
@@ -10,12 +11,16 @@ void Recorder::add(int line, Statement* stmt) {
    if (hasLine(line)) {
      remove(line);
    }
+   // std::cout << "root add" << std::endl;
    statements_[line] = stmt;
+   // for (auto it : statements_) {
+   //   std::cout  << it.second->text() << std::endl;
+   // }
  }
 
 void Recorder::remove(int line) {
    auto it = statements_.find(line);
-   if (it != statements_.end()) {
+   if (it != statements_.end()) {    //双重释放？ !=
      delete it->second;
      statements_.erase(it);
    }
@@ -41,9 +46,28 @@ void Recorder::clear() noexcept {
  }
 
 void Recorder::printLines() const {
+   // std::cout << "root print" << std::endl;
+   // std::cout << it.first << " " << it.second->text() << '\n';
    for (auto it : statements_) {
-     std::cout << it.second->text() << '\n';                   //还没找到输出的格式要求
+   // std::cout << it.first <<  '\n';
+     if (it.second == nullptr) {
+       // std::cout << "false" << std::endl;
+       return;
+     }
+   std::cout  << it.second->text() << std::endl;
+    // std::cout <<  it.second->text() << '\n';                   //还没找到输出的格式要求
    }
+   // std::vector<int> lines;
+   // for (const auto& pair : statements_) {
+   //   lines.push_back(pair.first);
+   // }
+   // std::sort(lines.begin(), lines.end());
+   //
+   // // 输出每行内容：行号 + 语句文本
+   // for (int line : lines) {
+   //   const Statement* stmt = statements_.at(line);
+   //   std::cout << line << " " << stmt->text() << std::endl;
+   // }
  }
 
 int Recorder::nextLine(int line) const noexcept {
@@ -61,10 +85,3 @@ std::vector<int> Recorder::getAllLines() const {
    }
    return lines;
  }
-
-
-
-
-
-
-
