@@ -52,9 +52,16 @@ int main() {
         //没行号，直接执行
         if (parsed_line.getStatement()) {
           // std::cout << "no num has content" << std::endl;
-          program.execute(parsed_line.getStatement());
-          // std::cout << "pass" << std::endl;
-          delete parsed_line.fetchStatement();
+          try {
+            program.execute(parsed_line.getStatement());
+            // std::cout << "pass" << std::endl;
+            delete parsed_line.fetchStatement();
+          }
+          catch (const BasicError& e) {
+            delete parsed_line.fetchStatement();
+            throw BasicError(e);
+          }
+
         }
       }
       else {

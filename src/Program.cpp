@@ -37,7 +37,12 @@ void Program::execute(const Statement* stmt) {
  }
 
 int Program::getPC() const noexcept {
-   return programCounter_;
+  if (programCounter_ < 0 || programCounter_ >= static_cast<int>(recorder_.getAllLines().size())) {
+    return -1;
+  }
+  auto lines = recorder_.getAllLines();
+  std::sort(lines.begin(), lines.end());
+  return lines[programCounter_];  // 返回实际行号
  }
 
 void Program::list() const {
@@ -74,6 +79,7 @@ void Program::run() {
       const int currentLine = lines[programCounter_];
       if (const auto stmt = recorder_.get(currentLine)) {
         execute(stmt);
+        // std::cout << "execute";
       }
       if (!programEnd_) {
         programCounter_++;
@@ -82,11 +88,11 @@ void Program::run() {
   } catch (const BasicError& error) {
     std::cout << error.what() << std::endl;
     resetAfterRun();
-    throw;
+    // throw;
   } catch (const std::exception& e) {
     std::cout << "RUNTIME ERROR: " << e.what() << std::endl;
     resetAfterRun();
-    throw BasicError("RUNTIME ERROR");
+    // throw BasicError("RUNTIME ERROR");
   }
 
   resetAfterRun();

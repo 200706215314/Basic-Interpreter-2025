@@ -44,10 +44,28 @@ void PrintStatement::execute(VarState& state, Program& program) const {
  InputStatement::~InputStatement() = default;
 
 void InputStatement::execute(VarState& state, Program& program) const {
-  int value;
-  std::cout << "?" << '\n';
-  std::cin >> value;
+  int value = 0;
+  std::string s;
+  std::cout << " ? ";
+  getline(std::cin, s);
+  // std::cout << s;
+  // std::cin >> value;
   //没判断输入是否合法
+  // if (std::cin.fail()) {
+  //   std::cin.clear();
+  //   std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+  //   throw BasicError("INVALID NUMBER");
+  //   std::cout << std::endl;
+  //   std::cout << " ? ";
+  // }
+  while (!InputStatement::IsValid(s, value)) {
+    value = 0;
+    s.clear();
+    std::cout << "INVALID NUMBER" << std::endl;
+    std::cout << " ? ";
+    getline(std::cin, s);
+  }
+  // std::cout << value;
   state.setValue(varName_, value);
 }
 
@@ -57,6 +75,7 @@ void InputStatement::execute(VarState& state, Program& program) const {
 
 void GotoStatement::execute(VarState& state, Program& program) const {
   //此语句将无条件地将控制权转移至程序中的第 n 行。如果第 n 行不存在，基本解释程序应生成一条错误消息，通知用户该行不存在
+  // std::cout << "change PC";
   program.changePC(line_);
 }
 

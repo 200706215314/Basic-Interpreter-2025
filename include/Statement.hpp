@@ -2,7 +2,7 @@
 
 #include <memory>
 #include <string>
-
+#include <iostream>
 #include "Expression.hpp"
 
 class Program;
@@ -52,6 +52,44 @@ public:
 
 private:
   std::string varName_;
+  static bool IsValid(std::string s, int &ans) {
+    if (s.empty()) {
+      return false;
+    }
+
+    bool flag = false;
+    int len = s.length(), index = 0;
+    char ch = s[index];
+    // std::cout << ch;
+    while (ch == ' ') {
+      index++;
+      ch = s[index];
+    }
+    if (ch == '-') {
+      index++;
+      ch = s[index];
+      flag = true;
+    }
+    while (ch != ' ') {
+      if (isdigit(ch)) {
+        // std::cout << "isdigit";
+        // std::cout << ch;
+        ans = (ans * 10 + (ch - '0'));
+        index++;
+        if (index == len) {
+          if (flag) {
+            ans *= -1;
+          }
+          return true;
+        }
+        ch = s[index];
+      }
+      else {
+        return false;
+      }
+    }
+  return false;
+  }
 };
 
 class GotoStatement: public Statement {
