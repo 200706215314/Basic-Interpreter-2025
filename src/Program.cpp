@@ -108,3 +108,11 @@ void Program::run() {
 
   resetAfterRun();
  }
+
+void Program::indent() {
+  vars_.indent();
+}
+
+void Program::dedent() {
+  vars_.dedent();
+}

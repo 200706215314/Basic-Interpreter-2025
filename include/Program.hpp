@@ -25,6 +25,9 @@ class Program {
   void programEnd();
   bool new_line = true;
 
+  void indent();
+  void dedent();
+
  private:
   Recorder recorder_;
   VarState vars_;

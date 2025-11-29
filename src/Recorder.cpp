@@ -20,7 +20,7 @@ void Recorder::add(int line, Statement* stmt) {
 
 void Recorder::remove(int line) {
    auto it = statements_.find(line);
-   if (it != statements_.end()) {    //双重释放？ !=
+   if (it != statements_.end()) {    //双重释放？
      delete it->second;
      statements_.erase(it);
    }

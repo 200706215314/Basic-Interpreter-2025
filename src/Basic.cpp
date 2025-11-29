@@ -27,7 +27,7 @@ int main() {
         continue; // 空行，跳过
       }
 
-      // 如果是标识符，可能是解释器命令`
+      // 如果是标识符，可能是解释器命令   没参数
 
         std::string command = firstToken->text;
 
@@ -44,12 +44,18 @@ int main() {
         } else if (command == "QUIT") {
           // std::cout << "in quit" << std::endl;
           break;
+        }else if (command == "INDENT") {
+          program.indent();
+          continue;
+        }else if (command == "DEDENT") {
+          program.dedent();
+          continue;
         }
 
       parsed_line = parser.parseLine(tokens, line);
 
       if (!parsed_line.getLine().has_value()) {
-        //没行号，直接执行
+        //没行号，直接执行、、
         if (parsed_line.getStatement()) {
           // std::cout << "no num has content" << std::endl;
           try {

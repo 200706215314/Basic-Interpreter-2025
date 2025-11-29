@@ -131,5 +131,19 @@ void EndStatement::execute(VarState& state, Program& program) const {
   program.programEnd();
 }
 
+ IndentStatement::IndentStatement(std::string source):Statement(std::move(source)) { };
 
+IndentStatement::~IndentStatement() = default;
+
+void IndentStatement::execute(VarState& state, Program& program) const {
+  state.indent();
+}
+
+DedentStatement::DedentStatement(std::string source):Statement(std::move(source)) { };
+
+DedentStatement::~DedentStatement() = default;
+
+void DedentStatement::execute(VarState& state, Program& program) const {
+  state.dedent();
+}
 

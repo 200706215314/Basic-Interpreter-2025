@@ -133,3 +133,20 @@ public:
   void execute(VarState& state, Program& program) const override;
 
 };
+
+
+class IndentStatement: public Statement {
+public:
+  explicit IndentStatement(std::string source);
+  ~IndentStatement()override;
+  void execute(VarState& state, Program& program) const override;
+
+};
+
+class DedentStatement: public Statement {
+public:
+  explicit DedentStatement(std::string source);
+  ~DedentStatement()override;
+  void execute(VarState& state, Program& program) const override;
+
+};
