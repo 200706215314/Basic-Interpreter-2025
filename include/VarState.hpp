@@ -20,7 +20,6 @@ class VarState {
 
   void setInCurrentScope(const std::string& name, int value);
 
-  std::pair<int*, int> findVariable(const std::string& name);
   const int* findVariable(const std::string& name) const;
 
 };
